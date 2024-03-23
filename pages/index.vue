@@ -2,18 +2,32 @@
 
    const { find } = useStrapi()
 
-   const { data, pending, error } = await useAsyncData('players', async () => {
+   const { data: player, pending, error } = await useAsyncData('players', async () => {
        return await find('players', {
             populate: '*'
-       }).then(res => res.data)
+       })
    })
 
+   const { data: tag} = await useAsyncData('tags', async () => {
+       return await find('tags', {
+            populate: '*'
+       })
+   })
+
+    const filter =ref('')
 </script>
 
 <template>
     <h1>Hello World</h1>
+    <select id="filter" v-model="filter">
+        <option value="nofilter">All</option>
+        <option v-for="oneTag in tag?.data" :key="oneTag.slug" :value="oneTag.name">{{ oneTag.name }}</option>
+    </select>
+
+
+
     <section>
-        <a :href="`/players/${player.slug}`" v-for="player in data" :key="player.slug">{{ player.name }}</a>
+        <a :href="`/players/${onePlayer.slug}`" v-for="onePlayer in player?.data" :key="onePlayer.slug">{{ onePlayer.name }}</a>
     </section>
 </template>
 
