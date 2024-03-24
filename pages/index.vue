@@ -14,7 +14,7 @@
        })
    })
 
-    const filter =ref('')
+    const filter =ref('nofilter')
     const search =ref('')
     
 </script>
@@ -22,8 +22,9 @@
 <template>
     <section v-if="pending">Loading...</section>
     <h1>League of Legends Pro Players</h1>
-    <select id="filter" v-model="filter">
-        <option selected value="nofilter" >All</option>
+
+    <select id="filter" v-model="filter" aria-label="label for the select">
+        <option value="nofilter">All</option>
         <option v-for="oneTag in tag?.data" :key="oneTag.slug" :value="oneTag.name">{{ oneTag.name }}</option>
     </select>
 
@@ -31,11 +32,13 @@
 
     <div class="playerBox">
         <section v-for="onePlayer in player?.data" >
-            <section class="allPlayers" v-if="onePlayer.name.toLowerCase().startsWith(search.toLowerCase()) == true ">
-                <a class="playerName" :href="`/players/${onePlayer.slug}`"  :key="onePlayer.slug">
+            <section class="allPlayers" v-if="filter === 'nofilter' || onePlayer.tags.some(tag => tag.name == filter) ">
+                <section v-if="onePlayer.name.toLowerCase().startsWith(search.toLowerCase()) == true">
+                    <a class="playerName" :href="`/players/${onePlayer.slug}`" :key="onePlayer.slug">
                     <p>{{ onePlayer.name }}</p>
                     <img :src="`${onePlayer.Images.formats.thumbnail.url}`">
                 </a>
+                </section>
             </section>
         </section>
     </div>
@@ -67,7 +70,6 @@
     .allPlayers {
         display: flex;
         flex-direction: column;
-        margin: 10px;
     }
     .playerBox {
         display: flex;
@@ -76,5 +78,6 @@
     }
     .playerName{
         text-decoration: none;
+        margin: 10px;
     }
 </style>
