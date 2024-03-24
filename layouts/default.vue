@@ -1,7 +1,7 @@
 <template>
     <main role="main">
         <header>
-            <nav>Welcome to</nav>
+            <nav>Welcome</nav>
         </header>
         <slot />
         <footer>
