@@ -1,11 +1,11 @@
 <template>
     <main role="main">
         <header>
-            <nav>The nav</nav>
+            <nav>Welcome to</nav>
         </header>
         <slot />
         <footer>
-            <p>© 2021</p>
+            <p>by Thibaut François</p>
         </footer>
     </main>
 </template>

@@ -8,42 +8,73 @@
        })
    })
 
-   const { data: tag} = await useAsyncData('tags', async () => {
+    const { data: tag} = await useAsyncData('tags', async () => {
        return await find('tags', {
             populate: '*'
        })
    })
 
     const filter =ref('')
+    const search =ref('')
+    
 </script>
 
 <template>
-    <h1>Hello World</h1>
+    <section v-if="pending">Loading...</section>
+    <h1>League of Legends Pro Players</h1>
     <select id="filter" v-model="filter">
-        <option value="nofilter">All</option>
+        <option selected value="nofilter" >All</option>
         <option v-for="oneTag in tag?.data" :key="oneTag.slug" :value="oneTag.name">{{ oneTag.name }}</option>
     </select>
 
+    <input type="text" v-model="search" placeholder="Search for a player">
 
+    <div class="playerBox">
+        <section v-for="onePlayer in player?.data" >
+            <section class="allPlayers" v-if="onePlayer.name.toLowerCase().startsWith(search.toLowerCase()) == true ">
+                <a class="playerName" :href="`/players/${onePlayer.slug}`"  :key="onePlayer.slug">
+                    <p>{{ onePlayer.name }}</p>
+                    <img :src="`${onePlayer.Images.formats.thumbnail.url}`">
+                </a>
+            </section>
+        </section>
+    </div>
 
-    <section>
-        <a :href="`/players/${onePlayer.slug}`" v-for="onePlayer in player?.data" :key="onePlayer.slug">{{ onePlayer.name }}</a>
-    </section>
 </template>
 
 <style scoped>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     h1 {
         color: red;
-    }
-    section {
-        display: flex;
-        flex-direction: column;
     }
     a {
         margin: 10px 0;
     }
-
+    
     a:hover {
         text-decoration: underline;
+    }
+    
+    img {
+        width: 100px;
+    }
+    
+    .allPlayers {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+    }
+    .playerBox {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .playerName{
+        text-decoration: none;
     }
 </style>
